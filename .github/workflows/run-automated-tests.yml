@@ -11,10 +11,8 @@ on:
         type: choice
         description: Group to run
         options:
-          - All Tests
-          - Smoke Tests
-          - Regression Tests
-        default: All Tests
+          - smoke
+          - regression
 
 jobs:
   tests:
@@ -53,7 +51,6 @@ jobs:
           COMMIT_MSG=$(git log -1 --pretty=%B)
           if [[ "$COMMIT_MSG" =~ \[groups:([^\]]+)\] ]]; then
             echo "GROUPS=${BASH_REMATCH[1]}" >> $GITHUB_ENV
-            echo "${BASH_REMATCH[1]}"
           else
             echo "GROUPS=${{ github.event.inputs.groupToRun }}" >> $GITHUB_ENV
           fi
