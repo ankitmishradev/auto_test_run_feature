@@ -53,7 +53,7 @@ jobs:
         run: |
           COMMIT_MSG=$(git log -1 --pretty=%B)
           echo "$COMMIT_MSG"
-          if [[ "$COMMIT_MESSAGE" =~ \[groups:(.*)\] ]]; then
+          if [[ "$commit_message" =~ \[groups:([^\]]+)\] ]]; then
             echo "GROUPS=${BASH_REMATCH[1]}" >> $GITHUB_ENV
             echo "${BASH_REMATCH[1]}"
           else
@@ -62,4 +62,4 @@ jobs:
           echo "$GROUPS"
 
       - name: Run Tests
-        run: mvn test -P "$GROUPS"
+        run: mvn test -Dgroups="$GROUPS"
