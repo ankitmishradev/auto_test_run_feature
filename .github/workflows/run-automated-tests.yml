@@ -52,8 +52,10 @@ jobs:
       - name: Set Test Groups
         run: |
           COMMIT_MSG=$(git log -1 --pretty=%B)
+          echo "$COMMIT_MSG"
           if [[ "$COMMIT_MESSAGE" =~ \[groups:(.*)\] ]]; then
             echo "GROUPS=${BASH_REMATCH[1]}" >> $GITHUB_ENV
+            echo "${BASH_REMATCH[1]}"
           else
             echo "GROUPS=${{ github.event.inputs.groupToRun || 'All Tests' }}" >> $GITHUB_ENV
           fi
