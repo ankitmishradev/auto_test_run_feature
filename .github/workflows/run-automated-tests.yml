@@ -1,0 +1,60 @@
+name: Run Automated Tests
+
+on:
+
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+    inputs:
+      groupToRun:
+        type: choice
+        description: Group to run
+        options:
+          - All Tests
+          - Smoke Tests
+          - Regression Tests
+        default: All Tests
+
+jobs:
+  tests:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+
+      - name: Cache Maven Dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Clean Maven
+        run: mvn clean
+
+      - name: Install Maven Dependencies
+        run: mvn install -DskipTests
+
+      - name: Set Test Groups
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          if [[ "$COMMIT_MESSAGE" =~ \[groups:(.*)\] ]]; then
+            echo "GROUPS=${BASH_REMATCH[1]}" >> $GITHUB_ENV
+          else
+            echo "GROUPS=${{ github.event.inputs.groupToRun || 'All Tests' }}" >> $GITHUB_ENV
+          fi
+          echo "$GROUPS"
+
+      - name: Run Tests
+        run: mvn test -P "$GROUPS"
