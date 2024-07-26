@@ -50,7 +50,7 @@ jobs:
       - name: Set Test Groups
         run: |
           if [[ -n "${{ github.event.inputs.groupToRun }}" ]]; then
-            if [[ "${{ github.event.inputs.groupToRun }}" == "All Tests"]]; then
+            if [[ "${{ github.event.inputs.groupToRun }}" == "All Tests" ]]; then
               echo "GROUPS=" >> $GITHUB_ENV
             else
               echo "GROUPS=${{ github.event.inputs.groupToRun }}" >> $GITHUB_ENV
