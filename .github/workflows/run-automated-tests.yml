@@ -11,7 +11,7 @@ on:
         type: choice
         description: Group to run
         options:
-          -
+          - All Tests
           - smoke
           - regression
 
@@ -50,7 +50,11 @@ jobs:
       - name: Set Test Groups
         run: |
           if [[ -n "${{ github.event.inputs.groupToRun }}" ]]; then
-            echo "GROUPS=${{ github.event.inputs.groupToRun }}" >> $GITHUB_ENV
+            if [[ "${{ github.event.inputs.groupToRun }}" == "All Tests"]]; then
+              echo "GROUPS=" >> $GITHUB_ENV
+            else
+              echo "GROUPS=${{ github.event.inputs.groupToRun }}" >> $GITHUB_ENV
+            fi
           else 
             COMMIT_MSG=$(git log -1 --pretty=%B)
             if [[ "$COMMIT_MSG" =~ \[groups:([^\]]+)\] ]]; then
