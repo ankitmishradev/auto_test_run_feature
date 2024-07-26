@@ -49,7 +49,7 @@ jobs:
 
       - name: Set Test Groups
         run: |
-          if [[ -n ${{ github.event.inputs.groupToRun }}]]
+          if [[ -n "${{ github.event.inputs.groupToRun }}" ]]
             echo "GROUPS=${{ github.event.inputs.groupToRun }}"
           else 
             COMMIT_MSG=$(git log -1 --pretty=%B)
@@ -62,7 +62,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          if [[ -n $GROUPS ]]; then
+          if [[ -n "$GROUPS" ]]; then
             mvn test -Dgroups="$GROUPS"
           else
             mvn test
