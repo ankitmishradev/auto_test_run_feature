@@ -49,7 +49,7 @@ jobs:
 
       - name: Set Test Groups
         run: |
-          if [[ -n "${{ github.event.inputs.groupToRun }}" ]]
+          if [[ -n "${{ github.event.inputs.groupToRun }}" ]]; then
             echo "GROUPS=${{ github.event.inputs.groupToRun }}" >> $GITHUB_ENV
           else 
             COMMIT_MSG=$(git log -1 --pretty=%B)
